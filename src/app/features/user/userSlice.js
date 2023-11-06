@@ -4,15 +4,22 @@ import axios from "axios";
 
 const initialState = {
   verification: false,
-  user: {},
+  users: [],
 };
 
 export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
+    getUsersList: async (state) => {
+      await axios
+        .get(`http://127.0.0.1:4449/users`)
+        .then((resp) => {
+          state.users.push(resp.data);
+        })
+        .catch((error) => console.log(error));
+    },
     saveUser: (state, action) => {
-      console.log(action);
       axios
         .post(`http://127.0.0.1:4449/users`, action.payload)
         .then((res) => {
@@ -30,6 +37,6 @@ export const userSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { saveUser, changeState } = userSlice.actions;
+export const { saveUser, changeState, getUsersList } = userSlice.actions;
 
 export default userSlice.reducer;

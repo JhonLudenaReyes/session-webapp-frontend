@@ -4,6 +4,7 @@ import axios from "axios";
 
 const initialState = {
   verification: false,
+  user: {},
   users: [],
 };
 
@@ -11,14 +12,6 @@ export const userSlice = createSlice({
   name: "user",
   initialState,
   reducers: {
-    getUsersList: async (state) => {
-      await axios
-        .get(`http://127.0.0.1:4449/users`)
-        .then((resp) => {
-          state.users.push(resp.data);
-        })
-        .catch((error) => console.log(error));
-    },
     saveUser: (state, action) => {
       axios
         .post(`http://127.0.0.1:4449/users`, action.payload)
@@ -30,6 +23,26 @@ export const userSlice = createSlice({
         })
         .catch((error) => console.log(error));
     },
+    editUser: (state, action) => {
+      const { userId, user, password } = action.payload;
+      axios
+        .put(`http://127.0.0.1:4449/users/${userId}`, {
+          userId,
+          user,
+          password,
+        })
+        .then((res) => {
+          if (res.status == 200) {
+            state.user = {};
+            state.verification = true;
+            console.log("Sus datos han sido actualizados con exito");
+          }
+        })
+        .catch((error) => console.log(error));
+    },
+    addUser: (state, action) => {
+      state.user = action.payload;
+    },
     changeState: (state, action) => {
       state.verification = action.payload;
     },
@@ -37,6 +50,7 @@ export const userSlice = createSlice({
 });
 
 // Action creators are generated for each case reducer function
-export const { saveUser, changeState, getUsersList } = userSlice.actions;
+export const { saveUser, changeState, getUsersList, addUser, editUser } =
+  userSlice.actions;
 
 export default userSlice.reducer;

@@ -1,11 +1,20 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { saveUser, changeState } from "../userSlice";
+import {
+  saveUser,
+  changeState,
+  addUser,
+  editUser,
+  getUsersList,
+} from "../userSlice";
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
+
+import { BsFillArrowLeftCircleFill } from "react-icons/bs";
 
 import toast, { Toaster } from "react-hot-toast";
 
 import "./styles/User.css";
+import { useNavigate } from "react-router-dom";
 
 const valueDefault = {
   userId: 0,
@@ -16,17 +25,26 @@ const valueDefault = {
 
 const UserRegister = () => {
   const [user, setUser] = useState(valueDefault);
+  const userEdit = useSelector((state) => state.user.user);
+
   const verification = useSelector((state) => state.user.verification);
 
   const notify = () => toast.success("Successfully toasted!");
 
+  const navigate = useNavigate();
+
   const dispatch = useDispatch();
 
   useEffect(() => {
+    if (userEdit.userId) {
+      setUser(userEdit);
+    }
+  }, []);
+
+  useEffect(() => {
     if (verification === true) {
-      console.log(verification);
       toast.success("Successfully toasted!");
-      dispatch(changeState);
+      dispatch(changeState(false));
     }
   }, [verification, dispatch]);
 
@@ -45,28 +63,28 @@ const UserRegister = () => {
       password: user.password,
     };
 
-    console.log(saveData);
-
-    dispatch(saveUser(saveData));
-
-    /*const editData = {
-      idProducto: product.idProducto,
-      idCategoria: selectedOption.value,
-      producto: producto.producto,
-      precio: producto.precio,
-      stock: producto.stock,
+    const editData = {
+      userId: user.userId,
+      user: user.user,
+      password: user.password,
     };
 
-    if (product.idProducto) {
-      dispatch(editProduct(editData));
+    if (user.userId) {
+      dispatch(editUser(editData));
     } else {
-      dispatch(saveProduct(saveData));
-    }*/
+      dispatch(saveUser(saveData));
+    }
+
     clearForm();
   };
 
   const clearForm = () => {
     setUser(valueDefault);
+  };
+
+  const usersList = () => {
+    dispatch(addUser({}));
+    navigate("/");
   };
 
   return (
@@ -78,6 +96,13 @@ const UserRegister = () => {
             <h1>
               <b>Registro de usuario</b>
             </h1>
+            <br />
+            <h5>
+              <BsFillArrowLeftCircleFill type="button" onClick={usersList} />{" "}
+              Volver listado
+            </h5>
+            <br />
+            <br />
             <Form noValidate onSubmit={onSubmit}>
               <Form.Group className="mb-3">
                 <Form.Label>Usuario</Form.Label>

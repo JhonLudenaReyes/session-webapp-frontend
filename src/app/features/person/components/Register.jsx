@@ -1,17 +1,30 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
 import "./styles/Register.css";
 
+const valueDefault = {
+  name: "",
+  lastName: "",
+  email: "",
+  cellPhone: "",
+};
+
 const Register = () => {
-  const onChange = () => {
-    console.log("first");
+  const [person, setPerson] = useState(valueDefault);
+
+  const onChange = (e) => {
+    setPerson({
+      ...person,
+      [e.target.id]: e.target.value,
+    });
   };
 
-  const onSubmit = () => {
-    console.log("first");
+  const onSubmit = (e) => {
+    e.preventDefault();
+    console.log(person);
   };
 
   return (
@@ -44,8 +57,8 @@ const Register = () => {
                     <Form.Label>Nombres</Form.Label>
                     <Form.Control
                       onChange={onChange}
-                      //value={this.state.firstName}
-                      id="firstName"
+                      value={person.name}
+                      id="name"
                       type="text"
                       placeholder="Ejm Manuel Andrés "
                     />
@@ -54,8 +67,8 @@ const Register = () => {
                     <Form.Label>Apellidos</Form.Label>
                     <Form.Control
                       onChange={onChange}
-                      //value={this.state.lastName1}
-                      id="lastName1"
+                      value={person.lastName}
+                      id="lastName"
                       type="text"
                       placeholder="Ejm Hernandez Cortés"
                     />
@@ -66,7 +79,7 @@ const Register = () => {
                     <Form.Label>Correo electrónico</Form.Label>
                     <Form.Control
                       onChange={onChange}
-                      //value={this.state.email}
+                      value={person.email}
                       id="email"
                       type="email"
                       placeholder="Ejm correo@mail.com"
@@ -76,8 +89,8 @@ const Register = () => {
                     <Form.Label>Celular</Form.Label>
                     <Form.Control
                       onChange={onChange}
-                      //value={this.state.user}
-                      id="user"
+                      value={person.cellPhone}
+                      id="cellPhone"
                       type="text"
                       placeholder="Ejm 099 999 9999"
                     />

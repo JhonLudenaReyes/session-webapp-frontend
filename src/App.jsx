@@ -2,9 +2,9 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import Navigation from "./app/features/layout/components/navbar/Navigation";
 import Landing from "./app/features/layout/components/Landing";
-import Footer from './app/features/layout/components/Footer'
+import Footer from "./app/features/layout/components/Footer";
 import Login from "./app/features/auth/components/Login";
-import Register from './app/features/auth/components/Register'
+import Register from "./app/features/person/components/Register";
 import UserRegister from "./app/features/user/components/UserRegister";
 import UsersList from "./app/features/user/components/UsersList";
 

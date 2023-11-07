@@ -1,0 +1,16 @@
+.Link-brand {
+    color: white;
+    text-decoration: inherit;
+}
+
+.Link-brand b {
+    font-size: 20px;
+}
+
+.Link-brand:hover {
+    color: rgba(255, 255, 255, 0.5);;
+}
+
+.Link-brand:active {
+    color: white;
+}

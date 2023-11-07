@@ -1,0 +1,15 @@
+.Link {
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: inherit;
+  padding: 0.5rem;
+}
+
+.Link:hover {
+  color: white;
+  text-decoration: inherit;
+}
+
+.Link:active {
+  color: lightslategrey;
+  text-decoration: inherit;
+}

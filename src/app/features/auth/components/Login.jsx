@@ -3,15 +3,20 @@ import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { Link, useNavigate } from "react-router-dom";
 
 import { AiOutlineArrowLeft } from "react-icons/ai";
-/*
-import { useDispatch, useSelector } from "react-redux";
 
-import { loginUser } from "../../actions/authActions";
-*/
+import { useSelector } from "react-redux";
+
 import "./styles/Login.css";
 
+import axios from "axios";
+
+const valueDefault = {
+  user: "",
+  password: "",
+};
+
 const Login = () => {
-  /*const dispatch = useDispatch();
+  const [user, setUser] = useState(valueDefault);
 
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
@@ -23,22 +28,24 @@ const Login = () => {
     }
   });
 
-  const [userData, setUserData] = useState({
-    usuario: "",
-    contrasenia: "",
-  });
-*/
+  const getLoginUser = (user) => {
+    axios
+      .get(`http://127.0.0.1:4449/users/session/login`, user)
+      .then((resp) => console.log(resp))
+      .catch((error) => console.log(error));
+  };
+
   const onChange = (e) => {
-    //setUserData({
-    //  ...userData,
-    //  [e.target.id]: e.target.value,
-    //});
+    setUser({
+      ...user,
+      [e.target.id]: e.target.value,
+    });
   };
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log("first");
-    //dispatch(loginUser(userData));
+    console.log(user);
+    getLoginUser(user);
   };
 
   return (
@@ -68,8 +75,8 @@ const Login = () => {
                 <Form.Label>Usuario</Form.Label>
                 <Form.Control
                   onChange={onChange}
-                  //value={this.state.email}
-                  id="usuario"
+                  value={user.user}
+                  id="user"
                   type="text"
                   placeholder="Ejm andhern"
                 />
@@ -78,8 +85,8 @@ const Login = () => {
                 <Form.Label>Contraseña</Form.Label>
                 <Form.Control
                   onChange={onChange}
-                  //value={this.state.password}
-                  id="contrasenia"
+                  value={user.password}
+                  id="password"
                   type="password"
                   placeholder="Ejm *** *** **"
                 />

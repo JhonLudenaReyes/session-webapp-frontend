@@ -1,5 +1,11 @@
+// REACT
 import { useState, useEffect } from "react";
+//REACT-ROUTER-DOM
+import { useNavigate } from "react-router-dom";
+//REACT-REDUX
 import { useDispatch, useSelector } from "react-redux";
+
+//SLICES
 import {
   saveUser,
   changeState,
@@ -7,14 +13,15 @@ import {
   editUser,
   getUsersList,
 } from "../userSlice";
+
+//REACT-BOOTSTRAP
 import { Container, Form, Button, Row, Col } from "react-bootstrap";
-
+//REACT-ICONS
 import { BsFillArrowLeftCircleFill } from "react-icons/bs";
-
+//REACT-HOT-TOAST
 import toast, { Toaster } from "react-hot-toast";
-
+//CSS
 import "./styles/User.css";
-import { useNavigate } from "react-router-dom";
 
 const valueDefault = {
   userId: 0,

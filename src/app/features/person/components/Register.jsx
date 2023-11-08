@@ -1,8 +1,20 @@
-import React, { useState } from "react";
+// REACT
+import React, { useEffect, useState } from "react";
+//REACT-ROUTER-DOM
 import { Link } from "react-router-dom";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
-import { AiOutlineArrowLeft } from "react-icons/ai";
+//REACT-REDUX
+import { useDispatch, useSelector } from "react-redux";
 
+//SLICES
+import { createPerson, changeState } from "../personSlice";
+
+//REACT-BOOTSTRAP
+import { Container, Row, Col, Form, Button } from "react-bootstrap";
+//REACT-ICONS
+import { AiOutlineArrowLeft } from "react-icons/ai";
+//REACT-HOT-TOAST
+import toast, { Toaster } from "react-hot-toast";
+//CSS
 import "./styles/Register.css";
 
 const valueDefault = {
@@ -13,7 +25,20 @@ const valueDefault = {
 };
 
 const Register = () => {
+  const notify = () =>
+    toast.success("¡Sus datos han registrados satisfactoriamente!");
+
+  const dispatch = useDispatch();
   const [person, setPerson] = useState(valueDefault);
+
+  const verification = useSelector((state) => state.person.verification);
+
+  useEffect(() => {
+    if (verification === true) {
+      notify();
+      dispatch(changeState(false));
+    }
+  }, [verification, dispatch]);
 
   const onChange = (e) => {
     setPerson({
@@ -24,7 +49,19 @@ const Register = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(person);
+    dispatch(
+      createPerson({
+        name: person.name,
+        lastName: person.lastName,
+        email: person.email,
+        cellPhone: person.cellPhone,
+      })
+    );
+    clearForm();
+  };
+
+  const clearForm = () => {
+    setPerson(valueDefault);
   };
 
   return (
@@ -107,6 +144,7 @@ const Register = () => {
           </Col>
         </Row>
       </Container>
+      <Toaster />
     </>
   );
 };

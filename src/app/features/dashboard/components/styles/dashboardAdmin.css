@@ -1,0 +1,17 @@
+.DashAdminContainer {
+    height: 75.8vh;
+    background-image: url("https://www.chromethemer.com/download/hd-wallpapers/blue-technology-3840x2160.jpg");
+  }
+  
+  .StylesRow {
+    height: 100%;
+  }
+  
+  .StylesRow h1 {
+    margin-top: 170px;
+  }
+  
+  .StylesRow h1 b{
+    color: aliceblue;
+    text-shadow: 3px 3px midnightblue;
+  }

@@ -4,11 +4,13 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
-import { useSelector } from "react-redux";
+import { loginUser } from "../authSlice";
+
+//import { useSelector } from "react-redux";
 
 import "./styles/Login.css";
 
-import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
 
 const valueDefault = {
   user: "",
@@ -17,7 +19,7 @@ const valueDefault = {
 
 const Login = () => {
   const [user, setUser] = useState(valueDefault);
-
+  const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   const navigate = useNavigate();
@@ -28,13 +30,6 @@ const Login = () => {
     }
   });
 
-  const getLoginUser = (user) => {
-    axios
-      .get(`http://127.0.0.1:4449/users/session/login`, user)
-      .then((resp) => console.log(resp))
-      .catch((error) => console.log(error));
-  };
-
   const onChange = (e) => {
     setUser({
       ...user,
@@ -42,11 +37,21 @@ const Login = () => {
     });
   };
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault();
     console.log(user);
-    getLoginUser(user);
+
+    //getLoginUser(user);
+    dispatch(loginUser(user));
   };
+
+  /*const getLoginUser = async (user) => {
+    const userLogin = await axios.post(
+      `http://127.0.0.1:4449/users/session/login`,
+      user
+    );
+    console.log(userLogin.data);
+  };*/
 
   return (
     <>

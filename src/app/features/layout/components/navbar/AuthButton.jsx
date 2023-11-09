@@ -1,20 +1,19 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
-//import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-//import { logoutUser } from "../../../actions/authActions";
+
+import { logoutUser } from "../../../auth/authSlice";
 
 const AuthButton = () => {
-  //const navigate = useNavigate();
-  //const dispatch = useDispatch();
-  //const { user } = useSelector((state) => state.auth);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
 
   const onLogoutClick = (e) => {
     e.preventDefault();
-    //dispatch(logoutUser());
-    //navigate("/");
-    console.log("adafafdsf")
-
+    dispatch(logoutUser(false));
+    navigate("/");
   };
 
   return (
@@ -22,7 +21,7 @@ const AuthButton = () => {
       <Row>
         <Col md="auto">
           <b style={{ color: "white" }}>
-            {user.persona.nombres + " " + user.persona.apellidos}
+            {user.Person.name + " " + user.Person.lastName}
           </b>
         </Col>
         <Col md="auto">

@@ -1,14 +1,14 @@
 import React from "react";
 import { Container, Row } from "react-bootstrap";
-import "./styles/dashboardAdmin.css";
+import "./styles/DashboardAdmin.css";
 
-const dashboardAdmin = () => {
+const DashboardAdmin = () => {
   return (
     <>
       <Container fluid className="DashAdminContainer">
         <Row className="StylesRow">
           <h1 className="text-center">
-            <b>Sistema web Seroficom...</b>
+            <b>Bienvenido al sistema de administración...</b>
           </h1>
         </Row>
       </Container>
@@ -16,4 +16,4 @@ const dashboardAdmin = () => {
   );
 };
 
-export default dashboardAdmin;
+export default DashboardAdmin;

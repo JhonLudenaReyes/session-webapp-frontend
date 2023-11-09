@@ -39,9 +39,6 @@ const Login = () => {
 
   const onSubmit = async (e) => {
     e.preventDefault();
-    console.log(user);
-
-    //getLoginUser(user);
     dispatch(loginUser(user));
   };
 

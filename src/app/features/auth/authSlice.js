@@ -3,7 +3,8 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   isAuthenticated: false,
-  authStatus: false,
+  errorStatus: false,
+  messageError: "",
   user: {},
 };
 
@@ -15,10 +16,8 @@ export const loginUser = createAsyncThunk(
       user
     );
 
-    if (res.status == 200) {
-      localStorage.setItem("user", JSON.stringify(res.data));
-      return res.data;
-    }
+    localStorage.setItem("user", JSON.stringify(res.data));
+    return res.data;
   }
 );
 
@@ -36,8 +35,13 @@ export const authSlice = createSlice({
   extraReducers: {
     // add your async reducers here
     [loginUser.fulfilled]: (state, action) => {
-      state.isAuthenticated = true;
-      state.user = action.payload;
+      console.log(action);
+      if (action.payload.userId) {
+        state.isAuthenticated = true;
+        state.user = action.payload;
+      } else {
+        (state.errorStatus = true), (state.messageError = action.payload);
+      }
     },
   },
 });

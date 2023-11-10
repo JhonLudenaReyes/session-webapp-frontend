@@ -20,8 +20,11 @@ import "./styles/Register.css";
 const valueDefault = {
   name: "",
   lastName: "",
+  identificationCard: "",
   email: "",
   cellPhone: "",
+  address: "",
+  password: "",
 };
 
 const Register = () => {
@@ -49,14 +52,17 @@ const Register = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(
+    console.log(person);
+    /*dispatch(
       createPerson({
         name: person.name,
         lastName: person.lastName,
+        identificationCard: person.identificationCard,
         email: person.email,
         cellPhone: person.cellPhone,
+        address: person.address,
       })
-    );
+    );*/
     clearForm();
   };
 
@@ -110,8 +116,16 @@ const Register = () => {
                       placeholder="Ejm Hernandez Cortés"
                     />
                   </Form.Group>
-                </Col>
-                <Col>
+                  <Form.Group>
+                    <Form.Label>Cédula</Form.Label>
+                    <Form.Control
+                      onChange={onChange}
+                      value={person.identificationCard}
+                      id="identificationCard"
+                      type="text"
+                      placeholder="Ejm 09xx xxx xxx"
+                    />
+                  </Form.Group>
                   <Form.Group>
                     <Form.Label>Correo electrónico</Form.Label>
                     <Form.Control
@@ -122,6 +136,8 @@ const Register = () => {
                       placeholder="Ejm correo@mail.com"
                     />
                   </Form.Group>
+                </Col>
+                <Col>
                   <Form.Group>
                     <Form.Label>Celular</Form.Label>
                     <Form.Control
@@ -130,6 +146,26 @@ const Register = () => {
                       id="cellPhone"
                       type="text"
                       placeholder="Ejm 099 999 9999"
+                    />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Dirección</Form.Label>
+                    <Form.Control
+                      onChange={onChange}
+                      value={person.address}
+                      id="address"
+                      type="text"
+                      placeholder="Ejm Gye-Sauces Av.7 Mz.4"
+                    />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label>Contraseña</Form.Label>
+                    <Form.Control
+                      onChange={onChange}
+                      value={person.password}
+                      id="password"
+                      type="password"
+                      placeholder="Ejm xxxx xx xx"
                     />
                   </Form.Group>
                 </Col>

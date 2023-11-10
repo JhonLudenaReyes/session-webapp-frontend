@@ -91,7 +91,7 @@ const UserRegister = () => {
 
   const usersList = () => {
     dispatch(addUser({}));
-    navigate("/");
+    navigate("/session-frontend");
   };
 
   return (

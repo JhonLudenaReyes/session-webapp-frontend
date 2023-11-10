@@ -31,11 +31,13 @@ export const authSlice = createSlice({
       state.user = {};
       state.isAuthenticated = action.payload;
     },
+    changeErrorStatus: (state, action) => {
+      state.errorStatus = action.payload;
+    },
   },
   extraReducers: {
     // add your async reducers here
     [loginUser.fulfilled]: (state, action) => {
-      console.log(action);
       if (action.payload.userId) {
         state.isAuthenticated = true;
         state.user = action.payload;
@@ -46,6 +48,6 @@ export const authSlice = createSlice({
   },
 });
 
-export const { logoutUser } = authSlice.actions;
+export const { logoutUser, changeErrorStatus } = authSlice.actions;
 
 export default authSlice.reducer;

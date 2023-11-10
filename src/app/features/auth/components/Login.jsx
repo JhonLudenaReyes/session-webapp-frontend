@@ -4,13 +4,14 @@ import { Link, useNavigate } from "react-router-dom";
 
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
-import { loginUser } from "../authSlice";
-
-//import { useSelector } from "react-redux";
-
-import "./styles/Login.css";
+import { loginUser, changeErrorStatus } from "../authSlice";
 
 import { useDispatch, useSelector } from "react-redux";
+
+//REACT-HOT-TOAST
+import toast, { Toaster } from "react-hot-toast";
+
+import "./styles/Login.css";
 
 const valueDefault = {
   user: "",
@@ -21,8 +22,19 @@ const Login = () => {
   const [user, setUser] = useState(valueDefault);
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
+  const errorStatus = useSelector((state) => state.auth.errorStatus);
+  const messageError = useSelector((state) => state.auth.messageError);
+
+  const notifyError = (messageError) => toast.error(`${messageError}`);
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (errorStatus) {
+      notifyError(messageError);
+      dispatch(changeErrorStatus(false));
+    }
+  }, [errorStatus]);
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -42,21 +54,13 @@ const Login = () => {
     dispatch(loginUser(user));
   };
 
-  /*const getLoginUser = async (user) => {
-    const userLogin = await axios.post(
-      `http://127.0.0.1:4449/users/session/login`,
-      user
-    );
-    console.log(userLogin.data);
-  };*/
-
   return (
     <>
       <Container className="LogContainer">
         <Row className="justify-content-md-center">
           <Col md="auto">
             <Link
-              to="/"
+              to="/session-frontend"
               style={{ color: "inherit", textDecoration: "inherit" }}
             >
               <AiOutlineArrowLeft /> Volver a inicio
@@ -73,34 +77,40 @@ const Login = () => {
               </p>
             </Col>
             <Form noValidate onSubmit={onSubmit}>
-              <Form.Group>
-                <Form.Label>Usuario</Form.Label>
-                <Form.Control
-                  onChange={onChange}
-                  value={user.user}
-                  id="user"
-                  type="text"
-                  placeholder="Ejm andhern"
-                />
-              </Form.Group>
-              <Form.Group>
-                <Form.Label>Contraseña</Form.Label>
-                <Form.Control
-                  onChange={onChange}
-                  value={user.password}
-                  id="password"
-                  type="password"
-                  placeholder="Ejm *** *** **"
-                />
-              </Form.Group>
-              <hr />
-              <Button variant="primary" type="submit">
-                Iniciar sesión
-              </Button>
+              <Row>
+                <Form.Group>
+                  <Form.Label>Usuario</Form.Label>
+                  <Form.Control
+                    onChange={onChange}
+                    value={user.user}
+                    id="user"
+                    type="text"
+                    placeholder="Ejm andhern"
+                  />
+                </Form.Group>
+                <Form.Group>
+                  <Form.Label>Contraseña</Form.Label>
+                  <Form.Control
+                    onChange={onChange}
+                    value={user.password}
+                    id="password"
+                    type="password"
+                    placeholder="Ejm *** *** **"
+                  />
+                </Form.Group>
+              </Row>
+              <br />
+              <Row>
+                <hr />
+                <Button variant="primary" type="submit">
+                  Iniciar sesión
+                </Button>
+              </Row>
             </Form>
           </Col>
         </Row>
       </Container>
+      <Toaster />
     </>
   );
 };

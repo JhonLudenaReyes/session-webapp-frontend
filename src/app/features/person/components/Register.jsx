@@ -70,7 +70,7 @@ const Register = () => {
         <Row className="justify-content-md-center">
           <Col md="auto">
             <Link
-              to="/"
+              to="/session-frontend"
               style={{ color: "inherit", textDecoration: "inherit" }}
             >
               <AiOutlineArrowLeft />

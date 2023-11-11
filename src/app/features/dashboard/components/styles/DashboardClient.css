@@ -1,0 +1,17 @@
+.DashClientContainer {
+    height: 75.8vh;
+    background-image: url("https://wallpapers.com/images/featured/information-technology-nucb4z97b3q78mjk.jpg");
+  }
+  
+  .StylesRow {
+    height: 100%;
+  }
+  
+  .StylesRow h1 {
+    margin-top: 170px;
+  }
+  
+  .StylesRow h1 b{
+    color: aliceblue;
+    text-shadow: 3px 3px midnightblue;
+  }

@@ -7,6 +7,7 @@ import Login from "./app/features/auth/components/Login";
 import Register from "./app/features/person/components/Register";
 import UserRegister from "./app/features/user/components/UserRegister";
 import DashboardAdmin from "./app/features/dashboard/components/DashboardAdmin";
+import DashboardClient from "./app/features/dashboard/components/DashboardClient";
 import UsersList from "./app/features/user/components/UsersList";
 
 const App = () => {
@@ -19,6 +20,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<DashboardAdmin />} />
+          <Route path="/dashboard/client" element={<DashboardClient />} />
           <Route path="/users/users-list" element={<UsersList />} />
           <Route path="/Users/user-register" element={<UserRegister />} />
         </Routes>

@@ -24,6 +24,7 @@ const Login = () => {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const errorStatus = useSelector((state) => state.auth.errorStatus);
   const messageError = useSelector((state) => state.auth.messageError);
+  const userStore = useSelector((state) => state.auth.user);
 
   const notifyError = (messageError) => toast.error(`${messageError}`);
 
@@ -38,7 +39,17 @@ const Login = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      return navigate("/dashboard");
+      switch (userStore.Role.role) {
+        case "ADMINISTRADOR":
+          return navigate("/dashboard");
+          break;
+        case "CLIENTE":
+          return navigate("/dashboard/client");
+          break;
+
+        default:
+          break;
+      }
     }
   });
 

@@ -6,7 +6,12 @@ import { Link } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
 //SLICES
-import { createPerson, changeState } from "../personSlice";
+import {
+  createPerson,
+  createUser,
+  changeState,
+  changePersonState,
+} from "../personSlice";
 
 //REACT-BOOTSTRAP
 import { Container, Row, Col, Form, Button } from "react-bootstrap";
@@ -35,6 +40,22 @@ const Register = () => {
   const [person, setPerson] = useState(valueDefault);
 
   const verification = useSelector((state) => state.person.verification);
+  const personStore = useSelector((state) => state.person.person);
+
+  useEffect(() => {
+    if (personStore.personId > 0) {
+      dispatch(
+        createUser({
+          personId: personStore.personId,
+          roleId: 2,
+          user: person.identificationCard,
+          password: person.password,
+        })
+      );
+      dispatch(changePersonState({}));
+      clearForm();
+    }
+  }, [dispatch, personStore]);
 
   useEffect(() => {
     if (verification === true) {
@@ -53,7 +74,7 @@ const Register = () => {
   const onSubmit = (e) => {
     e.preventDefault();
     console.log(person);
-    /*dispatch(
+    dispatch(
       createPerson({
         name: person.name,
         lastName: person.lastName,
@@ -61,9 +82,9 @@ const Register = () => {
         email: person.email,
         cellPhone: person.cellPhone,
         address: person.address,
+        password: person.password,
       })
-    );*/
-    clearForm();
+    );
   };
 
   const clearForm = () => {

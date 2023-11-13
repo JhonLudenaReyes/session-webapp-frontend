@@ -21,21 +21,18 @@ import { AiOutlineArrowLeft } from "react-icons/ai";
 import toast, { Toaster } from "react-hot-toast";
 //CSS
 import "./styles/Register.css";
-import { RadioGroup, RadioButton } from "react-radio-buttons";
+import { RadioGroup, Radio } from "react-radio-group";
 
+// Json de persona con valores por defecto predeterminados
 const valueDefault = {
   name: "",
   lastName: "",
   identificationCard: "",
+  ruc: "",
   email: "",
   cellPhone: "",
   address: "",
   password: "",
-};
-
-const valueIdentify = {
-  dni: true,
-  ruc: false,
 };
 
 const Register = () => {
@@ -44,7 +41,7 @@ const Register = () => {
 
   const dispatch = useDispatch();
   const [person, setPerson] = useState(valueDefault);
-  const [identify, setIdentify] = useState(valueIdentify);
+  const [selectedValue, setSelectedValue] = useState("dni");
 
   const verification = useSelector((state) => state.person.verification);
   const personStore = useSelector((state) => state.person.person);
@@ -55,7 +52,9 @@ const Register = () => {
         createUser({
           personId: personStore.personId,
           roleId: 2,
-          user: person.identificationCard,
+          user: person.identificationCard
+            ? person.identificationCard
+            : person.ruc,
           password: person.password,
         })
       );
@@ -80,12 +79,12 @@ const Register = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log(person);
     dispatch(
       createPerson({
         name: person.name,
         lastName: person.lastName,
         identificationCard: person.identificationCard,
+        ruc: person.ruc,
         email: person.email,
         cellPhone: person.cellPhone,
         address: person.address,
@@ -98,8 +97,19 @@ const Register = () => {
     setPerson(valueDefault);
   };
 
-  const selectIdentify = (e) => {
-    console.log(e);
+  const handleChange = (event) => {
+    setSelectedValue(event);
+    if (event == "dni") {
+      setPerson({
+        ...person,
+        ruc: "",
+      });
+    } else {
+      setPerson({
+        ...person,
+        identificationCard: "",
+      });
+    }
   };
 
   return (
@@ -152,21 +162,31 @@ const Register = () => {
                   <Form.Group>
                     <Form.Label>Identificación</Form.Label>
 
-                    <RadioGroup onChange={selectIdentify} horizontal>
-                      <RadioButton id="dni" value={identify.dni}>
-                        Cédula
-                      </RadioButton>
-                      <RadioButton id="ruc" value={identify.ruc}>
-                        R.U.C.
-                      </RadioButton>
+                    <RadioGroup
+                      name="Identify"
+                      selectedValue={selectedValue}
+                      onChange={handleChange}
+                    >
+                      <Radio value="dni" />
+                      Cédula <Radio value="ruc" />
+                      R.U.C.
                     </RadioGroup>
                     <hr />
                     <Form.Control
-                      onChange={selectIdentify}
+                      onChange={onChange}
                       value={person.identificationCard}
                       id="identificationCard"
                       type="text"
                       placeholder="Ejm 09xx xxx xxx"
+                      hidden={selectedValue == "dni" ? false : true}
+                    />
+                    <Form.Control
+                      onChange={onChange}
+                      value={person.ruc}
+                      id="ruc"
+                      type="text"
+                      placeholder="Ejm 24xxx xxxx xxxx"
+                      hidden={selectedValue == "ruc" ? false : true}
                     />
                   </Form.Group>
                 </Col>

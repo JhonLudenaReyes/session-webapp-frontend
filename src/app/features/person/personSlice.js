@@ -8,13 +8,22 @@ const initialState = {
 
 export const createPerson = createAsyncThunk(
   "person/create",
-  async ({ name, lastName, identificationCard, email, cellPhone, address }) => {
+  async ({
+    name,
+    lastName,
+    identificationCard,
+    ruc,
+    email,
+    cellPhone,
+    address,
+  }) => {
     const personResp = await axios.post(
       `http://127.0.0.1:4449/people/save-person`,
       {
         name,
         lastName,
         identificationCard,
+        ruc,
         email,
         cellPhone,
         address,

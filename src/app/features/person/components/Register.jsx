@@ -21,6 +21,7 @@ import { AiOutlineArrowLeft } from "react-icons/ai";
 import toast, { Toaster } from "react-hot-toast";
 //CSS
 import "./styles/Register.css";
+import { RadioGroup, RadioButton } from "react-radio-buttons";
 
 const valueDefault = {
   name: "",
@@ -98,7 +99,7 @@ const Register = () => {
   };
 
   const selectIdentify = (e) => {
-    console.log(e.isTrusted);
+    console.log(e);
   };
 
   return (
@@ -151,31 +152,17 @@ const Register = () => {
                   <Form.Group>
                     <Form.Label>Identificación</Form.Label>
 
-                    {["radio"].map((index, type) => (
-                      <div key={index} className="mb-3">
-                        <Form.Check
-                          inline
-                          label="Cédula"
-                          //name="groupIdentify"
-                          valueDefault={identify.dni}
-                          type={type}
-                          id="dni"
-                          onChange={selectIdentify}
-                        />
-                        <Form.Check
-                          inline
-                          label="R.U.C."
-                          //name="groupIdentify"
-                          valueDefault={identify.ruc}
-                          type={type}
-                          id="ruc"
-                          onChange={selectIdentify}
-                        />
-                      </div>
-                    ))}
-
+                    <RadioGroup onChange={selectIdentify} horizontal>
+                      <RadioButton id="dni" value={identify.dni}>
+                        Cédula
+                      </RadioButton>
+                      <RadioButton id="ruc" value={identify.ruc}>
+                        R.U.C.
+                      </RadioButton>
+                    </RadioGroup>
+                    <hr />
                     <Form.Control
-                      onChange={onChange}
+                      onChange={selectIdentify}
                       value={person.identificationCard}
                       id="identificationCard"
                       type="text"

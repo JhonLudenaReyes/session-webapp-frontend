@@ -32,12 +32,18 @@ const valueDefault = {
   password: "",
 };
 
+const valueIdentify = {
+  dni: true,
+  ruc: false,
+};
+
 const Register = () => {
   const notify = () =>
     toast.success("¡Sus datos han registrados satisfactoriamente!");
 
   const dispatch = useDispatch();
   const [person, setPerson] = useState(valueDefault);
+  const [identify, setIdentify] = useState(valueIdentify);
 
   const verification = useSelector((state) => state.person.verification);
   const personStore = useSelector((state) => state.person.person);
@@ -91,6 +97,10 @@ const Register = () => {
     setPerson(valueDefault);
   };
 
+  const selectIdentify = (e) => {
+    console.log(e.isTrusted);
+  };
+
   return (
     <>
       <Container className="AuthRegisContainer">
@@ -137,8 +147,33 @@ const Register = () => {
                       placeholder="Ejm Hernandez Cortés"
                     />
                   </Form.Group>
+
                   <Form.Group>
-                    <Form.Label>Cédula</Form.Label>
+                    <Form.Label>Identificación</Form.Label>
+
+                    {["radio"].map((index, type) => (
+                      <div key={index} className="mb-3">
+                        <Form.Check
+                          inline
+                          label="Cédula"
+                          //name="groupIdentify"
+                          valueDefault={identify.dni}
+                          type={type}
+                          id="dni"
+                          onChange={selectIdentify}
+                        />
+                        <Form.Check
+                          inline
+                          label="R.U.C."
+                          //name="groupIdentify"
+                          valueDefault={identify.ruc}
+                          type={type}
+                          id="ruc"
+                          onChange={selectIdentify}
+                        />
+                      </div>
+                    ))}
+
                     <Form.Control
                       onChange={onChange}
                       value={person.identificationCard}
@@ -147,6 +182,8 @@ const Register = () => {
                       placeholder="Ejm 09xx xxx xxx"
                     />
                   </Form.Group>
+                </Col>
+                <Col>
                   <Form.Group>
                     <Form.Label>Correo electrónico</Form.Label>
                     <Form.Control
@@ -157,8 +194,6 @@ const Register = () => {
                       placeholder="Ejm correo@mail.com"
                     />
                   </Form.Group>
-                </Col>
-                <Col>
                   <Form.Group>
                     <Form.Label>Celular</Form.Label>
                     <Form.Control

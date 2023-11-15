@@ -1,25 +1,40 @@
-import React, { useState, useEffect } from "react";
-import { Form, Button, Container, Row, Col } from "react-bootstrap";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+
 import { Link, useNavigate } from "react-router-dom";
 
+import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { AiOutlineArrowLeft } from "react-icons/ai";
 
 import { loginUser, changeErrorStatus } from "../authSlice";
 
-import { useDispatch, useSelector } from "react-redux";
+//REACT HOOK FORM VALIDATOR
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
 
 //REACT-HOT-TOAST
 import toast, { Toaster } from "react-hot-toast";
 
 import "./styles/Login.css";
 
-const valueDefault = {
-  user: "",
-  password: "",
-};
+// YUP SCHEMA DEFAULT
+const schema = yup
+  .object({
+    user: yup
+      .string()
+      .required("El usuario es un campo obligatorio")
+      .min(10, "El usuario debe tener al menos 10 caracteres")
+      .max(13, "El usuario debe tener como máximo 13 caracteres"),
+    password: yup
+      .string()
+      .required("El password es un campo obligatorio")
+      .min(7, "El password debe tener al menos 7 caracteres")
+      .max(13, "El password debe tener como máximo 13 caracteres."),
+  })
+  .required();
 
 const Login = () => {
-  const [user, setUser] = useState(valueDefault);
   const dispatch = useDispatch();
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
   const errorStatus = useSelector((state) => state.auth.errorStatus);
@@ -29,6 +44,15 @@ const Login = () => {
   const notifyError = (messageError) => toast.error(`${messageError}`);
 
   const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
   useEffect(() => {
     if (errorStatus) {
@@ -53,16 +77,9 @@ const Login = () => {
     }
   });
 
-  const onChange = (e) => {
-    setUser({
-      ...user,
-      [e.target.id]: e.target.value,
-    });
-  };
-
-  const onSubmit = async (e) => {
-    e.preventDefault();
-    dispatch(loginUser(user));
+  const onSubmit = (login) => {
+    console.log(login);
+    dispatch(loginUser(login));
   };
 
   return (
@@ -87,27 +104,31 @@ const Login = () => {
                 </Link>
               </p>
             </Col>
-            <Form noValidate onSubmit={onSubmit}>
+            <Form noValidate onSubmit={handleSubmit(onSubmit)}>
               <Row>
                 <Form.Group>
                   <Form.Label>Usuario</Form.Label>
                   <Form.Control
-                    onChange={onChange}
-                    value={user.user}
                     id="user"
                     type="text"
                     placeholder="Ejm andhern"
+                    {...register("user")}
                   />
+                  <Form.Text style={{ color: "red" }}>
+                    {errors.user?.message}
+                  </Form.Text>
                 </Form.Group>
                 <Form.Group>
                   <Form.Label>Contraseña</Form.Label>
                   <Form.Control
-                    onChange={onChange}
-                    value={user.password}
                     id="password"
                     type="password"
                     placeholder="Ejm *** *** **"
+                    {...register("password")}
                   />
+                  <Form.Text style={{ color: "red" }}>
+                    {errors.password?.message}
+                  </Form.Text>
                 </Form.Group>
               </Row>
               <br />

@@ -23,28 +23,60 @@ import toast, { Toaster } from "react-hot-toast";
 import "./styles/Register.css";
 import { RadioGroup, Radio } from "react-radio-group";
 
-// Json de persona con valores por defecto predeterminados
-const valueDefault = {
-  name: "",
-  lastName: "",
-  identificationCard: "",
-  ruc: "",
-  email: "",
-  cellPhone: "",
-  address: "",
-  password: "",
-};
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import * as yup from "yup";
+
+const schema = yup
+  .object({
+    name: yup
+      .string()
+      .required("El nombre es un campo obligatorio")
+      .min(10, "El usuario debe tener al menos 10 caracteres")
+      .max(30, "El usuario debe tener como máximo 30 caracteres"),
+    lastName: yup
+      .string()
+      .required("El apellido es un campo obligatorio")
+      .min(10, "El usuario debe tener al menos 10 caracteres")
+      .max(30, "El usuario debe tener como máximo 30 caracteres"),
+    identificationCard: yup.string(),
+    ruc: yup.string(),
+    email: yup.string().required("El email es un campo obligatorio"),
+    cellPhone: yup.string().required("El celular es un campo obligatorio"),
+    address: yup
+      .string()
+      .required("La dirección es un campo obligatorio")
+      .min(15, "El usuario debe tener al menos 15 caracteres")
+      .max(100, "El usuario debe tener como máximo 100 caracteres"),
+    password: yup
+      .string()
+      .required("La contraseña es un campo obligatorio")
+      .matches(
+        /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
+        "La contraseña debe contener al menos 8 caracteres, una mayúscula, un número y un carácter de caso especial."
+      ),
+  })
+  .required();
 
 const Register = () => {
   const notify = () =>
     toast.success("¡Sus datos han registrados satisfactoriamente!");
 
   const dispatch = useDispatch();
-  const [person, setPerson] = useState(valueDefault);
   const [selectedValue, setSelectedValue] = useState("dni");
 
   const verification = useSelector((state) => state.person.verification);
   const personStore = useSelector((state) => state.person.person);
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
 
   useEffect(() => {
     if (personStore.personId > 0) {
@@ -52,14 +84,15 @@ const Register = () => {
         createUser({
           personId: personStore.personId,
           roleId: 2,
-          user: person.identificationCard
-            ? person.identificationCard
-            : person.ruc,
-          password: person.password,
+          user: watch("identificationCard")
+            ? watch("identificationCard")
+            : watch("ruc"),
+
+          password: watch("password"),
         })
       );
       dispatch(changePersonState({}));
-      clearForm();
+      reset();
     }
   }, [dispatch, personStore]);
 
@@ -70,45 +103,28 @@ const Register = () => {
     }
   }, [verification, dispatch]);
 
-  const onChange = (e) => {
-    setPerson({
-      ...person,
-      [e.target.id]: e.target.value,
-    });
-  };
-
-  const onSubmit = (e) => {
-    e.preventDefault();
+  const onSubmit = (data) => {
+    //<pre>{JSON.stringify(watch(), null, 2)}</pre>
     dispatch(
       createPerson({
-        name: person.name,
-        lastName: person.lastName,
-        identificationCard: person.identificationCard,
-        ruc: person.ruc,
-        email: person.email,
-        cellPhone: person.cellPhone,
-        address: person.address,
-        password: person.password,
+        name: data.name,
+        lastName: data.lastName,
+        identificationCard: data.identificationCard,
+        ruc: data.ruc,
+        email: data.email,
+        cellPhone: data.cellPhone,
+        address: data.address,
+        password: data.password,
       })
     );
-  };
-
-  const clearForm = () => {
-    setPerson(valueDefault);
   };
 
   const handleChange = (event) => {
     setSelectedValue(event);
     if (event == "dni") {
-      setPerson({
-        ...person,
-        ruc: "",
-      });
+      watch("ruc", "");
     } else {
-      setPerson({
-        ...person,
-        identificationCard: "",
-      });
+      watch("identificationCard", "");
     }
   };
 
@@ -135,28 +151,32 @@ const Register = () => {
                 </Link>
               </p>
             </Col>
-            <Form noValidate onSubmit={onSubmit}>
+            <Form noValidate onSubmit={handleSubmit(onSubmit)}>
               <Row>
                 <Col>
                   <Form.Group>
                     <Form.Label>Nombres</Form.Label>
                     <Form.Control
-                      onChange={onChange}
-                      value={person.name}
                       id="name"
                       type="text"
                       placeholder="Ejm Manuel Andrés "
+                      {...register("name")}
                     />
+                    <Form.Text style={{ color: "red" }}>
+                      {errors.name?.message}
+                    </Form.Text>
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Apellidos</Form.Label>
                     <Form.Control
-                      onChange={onChange}
-                      value={person.lastName}
                       id="lastName"
                       type="text"
                       placeholder="Ejm Hernandez Cortés"
+                      {...register("lastName")}
                     />
+                    <Form.Text style={{ color: "red" }}>
+                      {errors.lastName?.message}
+                    </Form.Text>
                   </Form.Group>
 
                   <Form.Group>
@@ -173,63 +193,76 @@ const Register = () => {
                     </RadioGroup>
                     <hr />
                     <Form.Control
-                      onChange={onChange}
-                      value={person.identificationCard}
                       id="identificationCard"
                       type="text"
                       placeholder="Ejm 09xx xxx xxx"
                       hidden={selectedValue == "dni" ? false : true}
+                      {...register("identificationCard")}
                     />
+                    <Form.Text style={{ color: "red" }}>
+                      {errors.identificationCard?.message}
+                    </Form.Text>
+
                     <Form.Control
-                      onChange={onChange}
-                      value={person.ruc}
                       id="ruc"
                       type="text"
                       placeholder="Ejm 24xxx xxxx xxxx"
                       hidden={selectedValue == "ruc" ? false : true}
+                      {...register("ruc")}
                     />
+                    <Form.Text style={{ color: "red" }}>
+                      {errors.ruc?.message}
+                    </Form.Text>
                   </Form.Group>
                 </Col>
                 <Col>
                   <Form.Group>
                     <Form.Label>Correo electrónico</Form.Label>
                     <Form.Control
-                      onChange={onChange}
-                      value={person.email}
                       id="email"
                       type="email"
                       placeholder="Ejm correo@mail.com"
+                      {...register("email")}
                     />
+                    <Form.Text style={{ color: "red" }}>
+                      {errors.email?.message}
+                    </Form.Text>
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Celular</Form.Label>
                     <Form.Control
-                      onChange={onChange}
-                      value={person.cellPhone}
                       id="cellPhone"
                       type="text"
                       placeholder="Ejm 099 999 9999"
+                      {...register("cellPhone")}
                     />
+                    <Form.Text style={{ color: "red" }}>
+                      {errors.cellPhone?.message}
+                    </Form.Text>
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Dirección</Form.Label>
                     <Form.Control
-                      onChange={onChange}
-                      value={person.address}
                       id="address"
                       type="text"
                       placeholder="Ejm Gye-Sauces Av.7 Mz.4"
+                      {...register("address")}
                     />
+                    <Form.Text style={{ color: "red" }}>
+                      {errors.address?.message}
+                    </Form.Text>
                   </Form.Group>
                   <Form.Group>
                     <Form.Label>Contraseña</Form.Label>
                     <Form.Control
-                      onChange={onChange}
-                      value={person.password}
                       id="password"
                       type="password"
                       placeholder="Ejm xxxx xx xx"
+                      {...register("password")}
                     />
+                    <Form.Text style={{ color: "red" }}>
+                      {errors.password?.message}
+                    </Form.Text>
                   </Form.Group>
                 </Col>
               </Row>

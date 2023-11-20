@@ -27,22 +27,45 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
+//REGULAR EXPRESSIONS
+const phoneRegExp =
+  /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+
 const schema = yup
   .object({
     name: yup
       .string()
       .required("El nombre es un campo obligatorio")
+      .matches(
+        "[a-zA-Z ]{2,254}",
+        "Solo puede ingresar letras mayúsculas, minúsculas y espacios"
+      )
       .min(10, "El usuario debe tener al menos 10 caracteres")
       .max(30, "El usuario debe tener como máximo 30 caracteres"),
     lastName: yup
       .string()
       .required("El apellido es un campo obligatorio")
+      .matches(
+        "[a-zA-Z ]{2,254}",
+        "Solo puede ingresar letras mayúsculas, minúsculas y espacios"
+      )
       .min(10, "El usuario debe tener al menos 10 caracteres")
       .max(30, "El usuario debe tener como máximo 30 caracteres"),
     identificationCard: yup.string(),
     ruc: yup.string(),
-    email: yup.string().required("El email es un campo obligatorio"),
-    cellPhone: yup.string().required("El celular es un campo obligatorio"),
+    email: yup
+      .string()
+      .required("El email es un campo obligatorio")
+      .matches(
+        /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/,
+        "El correo electrónico debe ser un correo electrónico válido"
+      ),
+    cellPhone: yup
+      .string()
+      .required("El celular es un campo obligatorio")
+      .matches(phoneRegExp, "El número celular que ha ingresado no es válido")
+      .min(10, "Debe ingresar 10 caracteres")
+      .max(10, "Debe ingresar 10 caracteres"),
     address: yup
       .string()
       .required("La dirección es un campo obligatorio")
@@ -51,6 +74,8 @@ const schema = yup
     password: yup
       .string()
       .required("La contraseña es un campo obligatorio")
+      .min(8, "El usuario debe tener al menos 8 caracteres")
+      .max(16, "El usuario debe tener como máximo 16 caracteres")
       .matches(
         /^.*(?=.{8,})((?=.*[!@#$%^&*()\-_=+{};:,<.>]){1})(?=.*\d)((?=.*[a-z]){1})((?=.*[A-Z]){1}).*$/,
         "La contraseña debe contener al menos 8 caracteres, una mayúscula, un número y un carácter de caso especial."

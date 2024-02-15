@@ -13,7 +13,7 @@ const AuthButton = () => {
   const onLogoutClick = (e) => {
     e.preventDefault();
     dispatch(logoutUser(false));
-    navigate("/session-frontend");
+    navigate("/session-webapp");
   };
 
   return (

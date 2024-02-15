@@ -88,7 +88,7 @@ const Login = () => {
         <Row className="justify-content-md-center">
           <Col md="auto">
             <Link
-              to="/session-frontend"
+              to="/session-webapp"
               style={{ color: "inherit", textDecoration: "inherit" }}
             >
               <AiOutlineArrowLeft /> Volver a inicio

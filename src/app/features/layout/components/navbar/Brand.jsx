@@ -8,10 +8,10 @@ import "./styles/Brand.css";
 const Brand = () => {
   return (
     <>
-      <Link to="/session-frontend" className="Link-brand">
+      <Link to="/session-webapp" className="Link-brand">
         <Image src={Logo} width="60" height="60" roundedCircle />
         {"  "}
-        <b>Seroficom</b>
+        <b>Session webapp</b>
       </Link>
     </>
   );

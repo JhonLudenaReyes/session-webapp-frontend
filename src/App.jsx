@@ -16,7 +16,7 @@ const App = () => {
       <Router>
         <Navigation />
         <Routes>
-          <Route path="/session-frontend" element={<Landing />} />
+          <Route path="/session-webapp" element={<Landing />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/dashboard" element={<DashboardAdmin />} />

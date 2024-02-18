@@ -1,4 +1,3 @@
-import React, { useEffect } from "react";
 import { Col, Row } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -21,7 +20,7 @@ const AuthButton = () => {
       <Row>
         <Col md="auto">
           <b style={{ color: "white" }}>
-            {user.Person.name + " " + user.Person.lastName}
+            {user.person.name + " " + user.person.lastName}
           </b>
         </Col>
         <Col md="auto">

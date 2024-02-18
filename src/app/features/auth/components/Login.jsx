@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { Link, useNavigate } from "react-router-dom";
@@ -48,7 +48,6 @@ const Login = () => {
   const {
     register,
     handleSubmit,
-    watch,
     formState: { errors },
   } = useForm({
     resolver: yupResolver(schema),
@@ -59,18 +58,15 @@ const Login = () => {
       notifyError(messageError);
       dispatch(changeErrorStatus(false));
     }
-  }, [errorStatus]);
+  }, [dispatch, errorStatus, messageError]);
 
   useEffect(() => {
     if (isAuthenticated) {
-      switch (userStore.Role.role) {
-        case "ADMINISTRADOR":
+      switch (userStore.role.role) {
+        case "SUPER-ADMINISTRADOR":
           return navigate("/dashboard");
-          break;
         case "CLIENTE":
           return navigate("/dashboard/client");
-          break;
-
         default:
           break;
       }
@@ -78,7 +74,6 @@ const Login = () => {
   });
 
   const onSubmit = (login) => {
-    console.log(login);
     dispatch(loginUser(login));
   };
 

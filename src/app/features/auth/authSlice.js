@@ -15,7 +15,9 @@ export const loginUser = createAsyncThunk(
       .get(
         `http://localhost:8080/session/web-service/api/users/session-login?user=${user.user}&password=${user.password}`
       )
-      .then(console.log("¡Su usuario y/o contraseña son incorrectos!"));
+      .catch((error) => {
+        return error;
+      });
 
     localStorage.setItem("user", JSON.stringify(res.data));
     return res.data;
@@ -36,10 +38,12 @@ export const authSlice = createSlice({
       state.errorStatus = action.payload;
     },
   },
+
   extraReducers: {
     // add your async reducers here
+
     [loginUser.fulfilled]: (state, action) => {
-      if (action.payload.userId) {
+      if (action.payload) {
         state.isAuthenticated = true;
         state.user = action.payload;
       } else {

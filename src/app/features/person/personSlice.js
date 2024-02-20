@@ -18,7 +18,7 @@ export const createPerson = createAsyncThunk(
     address,
   }) => {
     const personResp = await axios.post(
-      `http://127.0.0.1:4449/people/save-person`,
+      `http://localhost:8080/session/web-service/api/people/person-save`,
       {
         name,
         lastName,
@@ -37,12 +37,15 @@ export const createPerson = createAsyncThunk(
 export const createUser = createAsyncThunk(
   "user/create",
   async ({ personId, roleId, user, password }) => {
-    const userResp = await axios.post(`http://127.0.0.1:4449/users/save-user`, {
-      personId,
-      roleId,
-      user,
-      password,
-    });
+    await axios.post(
+      `http://localhost:8080/session/web-service/api/users/save-user`,
+      {
+        personId,
+        roleId,
+        user,
+        password,
+      }
+    );
   }
 );
 

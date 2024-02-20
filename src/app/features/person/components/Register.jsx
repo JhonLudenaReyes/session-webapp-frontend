@@ -1,5 +1,5 @@
 // REACT
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 //REACT-ROUTER-DOM
 import { Link } from "react-router-dom";
 //REACT-REDUX
@@ -57,7 +57,7 @@ const schema = yup
       .string()
       .required("El email es un campo obligatorio")
       .matches(
-        /^(([^<>()\[\]\\.,;:\s@”]+(\.[^<>()\[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/,
+        /^(([^<>()[\]\\.,;:\s@”]+(\.[^<>()[\]\\.,;:\s@”]+)*)|(“.+”))@((\[[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}\.[0–9]{1,3}])|(([a-zA-Z\-0–9]+\.)+[a-zA-Z]{2,}))$/,
         "El correo electrónico debe ser un correo electrónico válido"
       ),
     cellPhone: yup
@@ -119,7 +119,7 @@ const Register = () => {
       dispatch(changePersonState({}));
       reset();
     }
-  }, [dispatch, personStore]);
+  }, [dispatch, personStore, reset, watch]);
 
   useEffect(() => {
     if (verification === true) {
